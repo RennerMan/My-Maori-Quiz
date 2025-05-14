@@ -1,19 +1,15 @@
-import tkinter
 from tkinter import *
 
 root = Tk()
 root.title("Maori Quiz")
 root.geometry("900x600")
 
-spiral = tkinter.PhotoImage(file=r"C:\Users\jdjre\OneDrive - Middleton Grange"
-                                 r"School\2025\DTC\3.7 "
-                                 r"Programming\Assessment\Spiral.png")
-
-f_spiral = tkinter.PhotoImage(file=r"C:\Users\jdjre\OneDrive - Middleton "
-                                   r"Grange"
-                                   r"School\2025\DTC\3.7 "
-                                   r"Programming\Assessment\Flipped_spiral"
-                                   r".png")
+spiral = PhotoImage(file=r"C:\Users\jdjre\OneDrive - Middleton Grange "
+                         r"School\2025\DTC\3.7 "
+                         r"Programming\Assessment\Spiral.png")
+f_spiral = PhotoImage(file=r"C:\Users\jdjre\OneDrive - Middleton Grange "
+                           r"School\2025\DTC\3.7 "
+                           r"Programming\Assessment\Flipped_spiral.png")
 spiral_icon = Label(root, image=spiral)
 spiral_icon.pack(side=LEFT)
 spiral_icon2 = Label(root, image=f_spiral)
