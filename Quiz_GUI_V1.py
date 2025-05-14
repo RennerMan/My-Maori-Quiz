@@ -24,31 +24,5 @@ main_popup.pack(ipadx=20)
 start = Button(root, bg="black", fg="azure", text="Start",
                font=("comic_sans", 30, "bold"))
 start.pack(pady=200)
-
-
-def additional_popup(action):
-    # Create a new popup window
-    popup = Toplevel(root)
-    popup.title(f"{action}")
-    popup.geometry("400x300")
-    popup.configure(bg="mediumpurple1")
-
-    # Dropdown menu
-    options = ["rand1", "rand2", "Correct"]
-    clicked = StringVar()
-    clicked.set("What number is 'Correct'?: ")
-    choice = OptionMenu(popup, clicked, *options)
-    choice.configure(bg="aquamarine3", fg="azure4",
-                     font=("serif", 12, "bold"), borderwidth=2,
-                     relief="solid")
-    choice.pack(pady=20)
-
-    # Confirmation button
-    confirmation = Button(popup, text="Click to confirm", bg="aquamarine3",
-                          fg="azure4", font=("serif", 12, "bold"),
-                          borderwidth=2, relief="solid")
-    confirmation.pack(pady=20)
-
-
 root.configure(bg="brown1")
 root.mainloop()
