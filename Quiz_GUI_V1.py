@@ -1,14 +1,33 @@
+import tkinter
 from tkinter import *
 
 root = Tk()
 root.title("Maori Quiz")
-root.geometry("800x500")
+root.geometry("900x600")
 
-main_popup = Label(root, bg="aquamarine3", fg="azure4",
+spiral = tkinter.PhotoImage(file=r"C:\Users\jdjre\OneDrive - Middleton Grange"
+                                 r"School\2025\DTC\3.7 "
+                                 r"Programming\Assessment\Spiral.png")
+
+f_spiral = tkinter.PhotoImage(file=r"C:\Users\jdjre\OneDrive - Middleton "
+                                   r"Grange"
+                                   r"School\2025\DTC\3.7 "
+                                   r"Programming\Assessment\Flipped_spiral"
+                                   r".png")
+spiral_icon = Label(root, image=spiral)
+spiral_icon.pack(side=LEFT)
+spiral_icon2 = Label(root, image=f_spiral)
+spiral_icon2.pack(side=RIGHT)
+
+main_popup = Label(root, bg="black", fg="azure",
                    text="Welcome to the \nMaori Quiz!",
-                   font=("serif", 50, "bold"), borderwidth=5,
+                   font=("comic_sans", 45, "bold", "italic"), borderwidth=2,
                    relief="solid")
 main_popup.pack(ipadx=20)
+
+start = Button(root, bg="black", fg="azure", text="Start",
+               font=("comic_sans", 30, "bold"))
+start.pack(pady=200)
 
 
 def additional_popup(action):
@@ -35,5 +54,5 @@ def additional_popup(action):
     confirmation.pack(pady=20)
 
 
-root.configure(bg="mediumpurple1")
+root.configure(bg="brown1")
 root.mainloop()
