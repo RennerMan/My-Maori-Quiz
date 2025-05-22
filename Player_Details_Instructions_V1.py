@@ -11,8 +11,10 @@ spiral = PhotoImage(
     file=r"C:\Users\jdjre\OneDrive - Middleton Grange School\2025\DTC\3.7 Programming\Assessment\Spiral.png")
 f_spiral = PhotoImage(
     file=r"C:\Users\jdjre\OneDrive - Middleton Grange School\2025\DTC\3.7 Programming\Assessment\Flipped_spiral.png")
+
 spiral_icon = Label(root, image=spiral, bg="brown1")
 spiral_icon.pack(side=LEFT)
+
 spiral_icon2 = Label(root, image=f_spiral, bg="brown1")
 spiral_icon2.pack(side=RIGHT)
 
@@ -23,6 +25,38 @@ main_popup = Label(root, bg="black", fg="azure",
                    borderwidth=2, relief="solid")
 main_popup.pack(ipadx=20, pady=20)
 
+
+# Function to show instructions
+def show_instructions(name, quiz_no):
+    # popup setup
+    instr_popup = Toplevel(root)
+    instr_popup.geometry("500x300")
+    instr_popup.configure(bg="brown1")
+
+    instr_title = Label(instr_popup, text="Instructions", bg="black",
+                        fg="azure",
+                        font=("Serif", 16, "bold"), borderwidth=2,
+                        relief="solid")
+    instr_title.pack(pady=10)
+
+    # Instructions
+    instr_text = (
+        f"Welcome {name}!\n"
+        f"You will be asked {quiz_no} questions.\n"
+        "Select the correct number for each Maori word.\n"
+        "At the end, your score will be displayed.\n"
+        "Good luck!"
+    )
+
+    instr_label = Label(instr_popup, text=instr_text, bg="brown1", fg="white",
+                        justify=CENTER, font=("Serif", 15, "bold"))
+    instr_label.pack(padx=20, pady=10)
+
+    start_btn = Button(instr_popup, text="Start Quiz", bg="black", fg="azure",
+                       font=("Comic Sans MS", 14, "bold"))
+    start_btn.pack(pady=20)
+
+
 # Function to collect player details
 def player_details():
     popup = Toplevel(root)
@@ -30,67 +64,46 @@ def player_details():
     popup.configure(bg="brown2")
 
     name_label = Label(popup, text="What is your name?", bg="black",
-                       fg="white", font=("Serif", 15, "bold"))
+                       fg="white",
+                       font=("Serif", 15, "bold"))
     name_label.pack(pady=20)
+
     name_entry = Entry(popup)
     name_entry.pack(pady=20)
+
     quiz_options = ["5", "10", "20", "30"]
     options_var = StringVar(popup)
     options_var.set("Select no. of quiz questions:")
+
     choices = OptionMenu(popup, options_var, *quiz_options)
-    choices.configure(bg="black", fg="white",
-                      font=("Serif", 14, "bold"))
+    choices.configure(bg="black", fg="white", font=("Serif", 14, "bold"))
     choices.pack(pady=20)
 
     def confirm():
         name = name_entry.get().strip()
         num = options_var.get()
+
         # validate name
         if not name.isalpha():
             messagebox.showerror("Invalid Name",
                                  "Name must contain only letters.")
             return
+
         # validate quiz count
         if num not in quiz_options:
             messagebox.showerror("Invalid Selection",
                                  "Please choose number of questions.")
             return
+
         popup.destroy()
         show_instructions(name, int(num))
 
     confirm_btn = Button(popup, text="Click to confirm", bg="black",
-                         fg="white", font=("Serif", 12, "bold"),
-                         borderwidth=2, relief="solid", command=confirm)
+                         fg="white",
+                         font=("Serif", 12, "bold"), borderwidth=2,
+                         relief="solid",
+                         command=confirm)
     confirm_btn.pack(pady=70)
-
-
-# Function to show instructions
-def show_instructions(name, quiz_no):
-    instr_popup = Toplevel(root)
-    instr_popup.geometry("500x300")
-    instr_popup.configure(bg="brown1")
-
-    instr_title = Label(instr_popup, text="Instructions", bg="brown1",
-                        fg="azure",
-                        font=("Serif", 16, "bold"))
-    instr_title.pack(pady=10)
-
-    instr_text = (
-        f"Welcome {name}!\n"
-        f"You will be asked {quiz_no} questions.\n"
-        "Select the correct Maori name for each number.\n"
-        "At the end, your scores will be counted up and you have the option "
-        "to try again or post your high score for others to see.\n"
-        "Good luck!"
-    )
-    instr_label = Label(instr_popup, text=instr_text, bg="brown1",
-                        fg="azure4",
-                        justify=LEFT, font=("Serif", 12))
-    instr_label.pack(padx=20, pady=10)
-
-    start_btn = Button(instr_popup, text="Start Quiz", bg="black", fg="azure",
-                       font=("Comic Sans MS", 14, "bold"))
-    start_btn.pack(pady=20)
 
 
 # Start button on main window
