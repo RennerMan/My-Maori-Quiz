@@ -1,36 +1,19 @@
-""" V1 of the score tracker component. Updated Quiz Questions with restart,
-quit, final score, and high-score tracking."""
+"""Quiz Questions V2. Fixed no answer given being seen as an incorrect answer
+"""
 
-# Import statements for tkinter, random for quiz questions
-# os, as this is the only way to delete additional files,
-# which I decided to add
 from tkinter import *
 from tkinter import messagebox
 import random
-import os
 
-# Base popup setup
 root = Tk()
 root.title("Maori Quiz")
 root.geometry("900x600")
 root.configure(bg="brown1")
-# Spiral photos. Added a flipped spiral by flipping the image
-# And incorporating it like the other one
-spiral = PhotoImage(
-    file=r"C:\Users\jdjre\OneDrive - Middleton Grange School\2025\DTC\3.7 Programming\Assessment\Spiral.png")
-f_spiral = PhotoImage(
-    file=r"C:\Users\jdjre\OneDrive - Middleton Grange School\2025\DTC\3.7 Programming\Assessment\Flipped_spiral.png")
-spiral_icon = Label(root, image=spiral, bg="brown1")
-spiral_icon.pack(side=LEFT)
-spiral_icon2 = Label(root, image=f_spiral, bg="brown1")
-spiral_icon2.pack(side=RIGHT)
 
-# Global variables
+# Global variables to share quiz settings
 quiz_no = 0
 name = ""
-score = 0
-highscore_file = "highscores.txt"
-# My quiz questions- Contains dictionary of maori names and actual numbers
+
 questions = {
     "Tahi": 1, "Rua": 2, "Toru": 3, "Wha": 4, "Rima": 5, "Ono": 6,
     "Whitu": 7, "Waru": 8, "Iwa": 9, "Tekau": 10, "Tekau ma Tahi": 11,
@@ -43,6 +26,17 @@ questions = {
     "Toru Tekau": 30
 }
 
+# Load and display images
+spiral = PhotoImage(
+    file=r"C:\Users\jdjre\OneDrive - Middleton Grange School\2025\DTC\3.7 Programming\Assessment\Spiral.png")
+f_spiral = PhotoImage(
+    file=r"C:\Users\jdjre\OneDrive - Middleton Grange School\2025\DTC\3.7 Programming\Assessment\Flipped_spiral.png")
+spiral_icon = Label(root, image=spiral, bg="brown1")
+spiral_icon.pack(side=LEFT)
+spiral_icon2 = Label(root, image=f_spiral, bg="brown1")
+spiral_icon2.pack(side=RIGHT)
+
+# Welcome message
 main_popup = Label(root, bg="black", fg="azure",
                    text="Welcome to the \nMaori Quiz!",
                    font=("Comic Sans MS", 45, "bold", "italic"),
@@ -50,19 +44,17 @@ main_popup = Label(root, bg="black", fg="azure",
 main_popup.pack(ipadx=20, pady=20)
 
 
-# player details function. Asks for name and no. of quiz questions
 def player_details():
-    # popup setup
     popup = Toplevel(root)
     popup.geometry("400x400")
     popup.configure(bg="brown2")
-    # Asks for name
+
     name_label = Label(popup, text="What is your name?", bg="black",
                        fg="white", font=("Serif", 15, "bold"))
     name_label.pack(pady=20)
     name_entry = Entry(popup)
     name_entry.pack(pady=20)
-    # Number of quiz questions dropdown
+
     quiz_options = [5, 10, 20, 30]
     options_var = StringVar(popup)
     options_var.set("Select no. of quiz questions:")
@@ -70,23 +62,23 @@ def player_details():
     choices.configure(bg="white", fg="black", font=("Serif", 14, "bold"))
     choices.pack(pady=20)
 
-    # confirmation of name and quiz no.
     def confirm():
-        global quiz_no, name, score
+        global quiz_no, name
         name_input = name_entry.get().strip()
         selected = options_var.get()
+
         if not all(part.isalpha() for part in name.split()):
             messagebox.showerror("Invalid Name",
                                  "Name must contain only letters and spaces.")
             return
+
         if selected not in map(str, quiz_options):
             messagebox.showerror("Invalid Selection",
                                  "Please choose number of questions.")
             return
-        # Sets name to name_input and quiz_no to selected no. for later use
+
         name = name_input
         quiz_no = int(selected)
-        score = 0
         popup.destroy()
         show_instructions()
 
@@ -97,7 +89,6 @@ def player_details():
 
 
 def show_instructions():
-    # popup setup
     instr_popup = Toplevel(root)
     instr_popup.geometry("500x300")
     instr_popup.configure(bg="brown1")
@@ -106,7 +97,7 @@ def show_instructions():
                         fg="azure", font=("Serif", 16, "bold"), borderwidth=2,
                         relief="solid")
     instr_title.pack(pady=10)
-    # Instructions
+
     instr_text = (
         f"Welcome {name}!\n"
         f"You will be asked {quiz_no} questions.\n"
@@ -126,20 +117,18 @@ def show_instructions():
     start_btn.pack(pady=20)
 
 
-# Quiz questions. Asks the user what the number for a maori name is,
-# Providing 3 options for them to choose from.
 def quiz_questions():
     quiz_data = random.sample(list(questions.items()), quiz_no)
 
     def ask(index):
         if index >= quiz_no:
-            return show_score()
-
+            return
         num_word, correct_answer = quiz_data[index]
-        # Popup setup
+
         popup = Toplevel(root)
         popup.geometry("400x300")
         popup.configure(bg="brown1")
+
         question_label = Label(popup, text=f"What number is '{num_word}'?",
                                bg="brown1", fg="white",
                                font=("Serif", 15, "bold"))
@@ -149,7 +138,7 @@ def quiz_questions():
         wrong_answers = random.sample(all_vals, 2)
         options = wrong_answers + [correct_answer]
         random.shuffle(options)
-        # Dropdown of the multichoice answers
+
         clicked = StringVar(popup)
         clicked.set("Choose an answer")
         choice = OptionMenu(popup, clicked, *options)
@@ -158,7 +147,6 @@ def quiz_questions():
                          borderwidth=2, relief="solid")
         choice.pack(pady=20)
 
-        # Confirmation
         def confirm():
             selected = clicked.get()
             if selected == "Choose an answer":
@@ -183,65 +171,6 @@ def quiz_questions():
     ask(0)
 
 
-def show_score():
-    save_high_score()
-    # Popup setup
-    popup = Toplevel(root)
-    popup.geometry("400x400")
-    popup.configure(bg="brown1")
-    # Shows correct questions over total questions asked (eg: 9/10)
-    score_label = Label(popup,
-                        text=f"{name}, your final score is {score}/{quiz_no}",
-                        bg="black", fg="white", font=("Serif", 16, "bold"))
-    score_label.pack(pady=20)
-    # Restarts the program
-    Button(popup, text="Restart", bg="green", fg="white",
-           font=("Serif", 12, "bold"),
-           command=lambda: [popup.destroy(), player_details()]).pack(pady=10)
-    # Quits the program
-    Button(popup, text="Quit", bg="red", fg="white",
-           font=("Serif", 12, "bold"), command=root.quit).pack(pady=10)
-    # Allows user to see the high scores
-    Button(popup, text="View High Scores", bg="blue", fg="white",
-           font=("Serif", 12, "bold"), command=show_high_scores).pack(pady=10)
-
-
-def save_high_score():
-    with open(highscore_file, "a") as file:
-        file.write(f"{name}: {score}/{quiz_no}\n")
-
-
-def show_high_scores():
-    # Popup setup
-    popup = Toplevel(root)
-    popup.geometry("400x400")
-    popup.configure(bg="white")
-    # High scores title
-    title = Label(popup, text="High Scores", font=("Serif", 16, "bold"),
-                  bg="black", fg="white")
-    title.pack(pady=10)
-    # If there are any highscores, then show them. Else, say there is none.
-    if os.path.exists(highscore_file):
-        with open(highscore_file, "r") as file:
-            scores = file.read()
-    else:
-        scores = "No scores recorded yet."
-    # The label for the scores
-    score_label = Label(popup, text=scores, font=("Serif", 12), bg="white",
-                        justify=LEFT)
-    score_label.pack(padx=10, pady=10)
-    # Deletes all high scores
-    Button(popup, text="Delete Scores", bg="red", fg="white",
-           font=("Serif", 10, "bold"), command=delete_scores).pack(pady=10)
-
-
-def delete_scores():
-    if os.path.exists(highscore_file):
-        os.remove(highscore_file)
-        messagebox.showinfo("Deleted", "All high scores have been deleted.")
-
-
-# Start button on main popup that begins the program
 start = Button(root, text="Start", bg="black", fg="azure",
                font=("Comic Sans MS", 30, "bold"), command=player_details)
 start.pack(pady=100)
