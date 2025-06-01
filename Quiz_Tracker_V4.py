@@ -30,11 +30,8 @@ class MaoriQuiz:
 
         # Spiral photos. Added a flipped spiral by flipping the image
         # And incorporating it like the other one
-        self.spiral = PhotoImage(
-            file=r"C:\Users\jdjre\OneDrive - Middleton Grange School\2025\DTC\3.7 Programming\Assessment\Spiral.png")
-        self.f_spiral = PhotoImage(
-            file=r"C:\Users\jdjre\OneDrive - Middleton Grange School\2025\DTC\3.7 Programming\Assessment\Flipped_spiral.png")
-
+        self.spiral = PhotoImage(file="Spiral.png")
+        self.f_spiral = PhotoImage(file="Flipped_spiral.png")
         self.l_spiral = Label(self.root, image=self.spiral, bg="brown1")
         self.l_spiral.pack(side=LEFT)
         self.r_spiral = Label(self.root, image=self.f_spiral, bg="brown1")
@@ -56,7 +53,7 @@ class MaoriQuiz:
         self.quiz_no = 0
         self.highscore_file = "highscores.txt"
 
-        # Dictionary containing Māori names for numbers 1-30
+        # Dictionary containing Maori names for numbers 1-30
         # And their number counterparts
         self.questions = {
             "Tahi": 1, "Rua": 2, "Toru": 3, "Wha": 4, "Rima": 5, "Ono": 6,
