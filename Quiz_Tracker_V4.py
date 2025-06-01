@@ -1,6 +1,9 @@
-"""V3 of the Quiz Tracker function. Added Samuel and Rachel's feedback:
-deleting old popups, and letting the user know how far through
-the quiz they are."""
+"""V4 of the Quiz Tracker function. Fixed score that wasn't working in V3,
+as a result of clicking confirm on a correct question multiple times, which
+increased the score each time without giving a new question. Also fixed error
+of players with the same name getting increasingly more points. In addition to
+this, also hid main popup when player details is run instead of instructions.
+Now there is only 1 popup on screen at a time."""
 
 # Import statements for tkinter, random for quiz questions
 # os, as this is the only way to delete files outside of python (highscore)
@@ -80,7 +83,6 @@ class MaoriQuiz:
         # Displays the instructions popup before starting the quiz
 
     def show_instructions(self):
-        self.root.withdraw()
         popup = self.create_popup("Instructions", 500, 300)
 
         Label(popup, text="Instructions", bg="black", fg="azure",
@@ -108,6 +110,7 @@ class MaoriQuiz:
 
     # player details function. Asks for name and no. of quiz questions
     def player_details(self):
+        self.root.withdraw()
         popup = Toplevel(self.root)
         popup.geometry("400x400")
         popup.configure(bg="brown2")
@@ -147,6 +150,8 @@ class MaoriQuiz:
                 return
             self.name = name
             self.quiz_no = int(num)
+            # Reset score when starting new quiz
+            self.score = 0
             popup.destroy()
             self.show_instructions()
 
@@ -192,12 +197,27 @@ class MaoriQuiz:
                              borderwidth=2, relief="solid")
             choice.pack(pady=20)
 
+            # Creates a list containing the 'False' value for the answer
+            answered = [False]
+
             def confirm():
+                # Checks if the only item in the answered list is True.
+                # If it is, exit the function (return)
+                # If not, set answered to true and continue.
+                # What the 'answered' section of the code does is
+                # Ensure that I can't click the confirm button for a correct
+                # Question multiple times, adding more points
+                # As explained at the top of my code
+                if answered[0]:
+                    return
+                answered[0] = True
+
                 selected = clicked.get()
                 if selected == "Choose an answer":
                     messagebox.showwarning("No Selection",
                                            "Please choose an answer "
                                            "before confirming.")
+                    answered[0] = False  # Resets if no selection made
                     return
                 elif selected == str(correct_answer):
                     messagebox.showinfo("Result", "Correct!")
